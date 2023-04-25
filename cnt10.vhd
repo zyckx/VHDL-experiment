@@ -1,20 +1,23 @@
-LIBRARY ieee;
-USE ieee.std_logic_1164.ALL;
-ENTITY dff1 IS
+LIBRARY library IEEE;
+USE IEEE.std_logic_1164.ALL;
+USE IEEE.std_logiC_unsigned;
+ENTITY cnt10 IS
     PORT (
-        CLK : IN STD_LOGIC;
-        D : IN STD_LOGIC;
-        Q : IN STD_LOGIC
+        CLK, RST, EN : IN STD_LOGIC;
+        CQ : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        COUT : IN STD_LOGIC
     );
-END dff1;
-ARCHITECTURE bhv OF dff1 IS
-    SIGNAL Q1 : STD_LOGIC;
-BEGIN
-    PROCESS (CLK, D)
+END cnt10;
+ARCHITECTURE behav OF cnt10 IS
+    PROCESS (CLK, RST, EN)
+        VARIABLE CQI : STD_LOGIC_VECTOR(3 DOWNTO 0);
+        VARIABLE CO : STD_LOGIC;
+
     BEGIN
-        IF CLK'event AND CLK = '1' THEN
-            Q1 <= D;
+        IF rst = '0' THEN CQI:=(others => '0'); -- reset
+        
+
+        ELSIF rising_edge(clk) THEN
+
         END IF;
     END PROCESS;
-    Q <= Q1;
-END bhv;
