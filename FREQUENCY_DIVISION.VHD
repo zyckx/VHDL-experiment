@@ -1,0 +1,66 @@
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.ALL;
+ENTITY FREQUENCY_DIVISION IS
+    PORT (
+        CLK : IN STD_LOGIC; --frequency of  input clock 12MHz=12000000Hz
+        CLK1MHZ : OUT STD_LOGIC; --frequency of  output clock 1MHz=1000000Hz
+        CLK1KHZ : OUT STD_LOGIC; --frequency of  output clock 1KHz=1000Hz
+        CLK10HZ : OUT STD_LOGIC; --frequency of  output clock 10Hz
+        CLK1HZ : OUT STD_LOGIC --frequency of  output clock 1Hz
+    );
+END ENTITY FREQUENCY_DIVISION;
+ARCHITECTURE behav OF FREQUENCY_DIVISION IS
+    SIGNAL CLK1MHZ_TEMP : STD_LOGIC;
+    SIGNAL CLK1KHZ_TEMP : STD_LOGIC;
+    SIGNAL CLK10HZ_TEMP : STD_LOGIC;
+    SIGNAL CLK1HZ_TEMP : STD_LOGIC;
+    SIGNAL CLLCNT1MHZ : INTEGER RANGE 0 TO 5; --1US
+    SIGNAL CLLCNT1KHZ : INTEGER RANGE 0 TO 499; --1MS
+    SIGNAL CLLCNT10HZ : INTEGER RANGE 0 TO 49; --10MS
+    SIGNAL CLLCNT1HZ : INTEGER RANGE 0 TO 4; --1S
+BEGIN
+    CLK1MHZ <= CLK1MHZ_TEMP;
+    CLK1KHZ <= CLK1KHZ_TEMP;
+    CLK10HZ <= CLK10HZ_TEMP;
+    CLK1HZ <= CLK1HZ_TEMP;
+    PROCESS (CLK, CLK1MHZ_TEMP, CLKCNT1MHZ, CLK1KHZ_TEMP, CLKCNT1KHZ, CLK10HZ_TEMP, CLKCNT10HZ, CLK1HZ_TEMP, CLKCNT1HZ)
+    BEGIN
+        IF CLK'event AND CLK = '1' THEN
+            IF CLKCNT1MHZ = 5 THEN
+                CLKCNT1MHZ <= 0;
+
+                CLK1MHZ_TEMP <= NOT CLK1MHZ_TEMP;
+            ELSE
+                CLKCNT1MHZ <= CLKCNT1MHZ + 1;
+            END IF;
+        END IF;
+        IF CLK1MHZ_TEMP'event AND CLK1MHZ_TEMP = '1' THEN
+            IF CLKCNT1KHZ = 499 THEN
+                CLKCNT1KHZ <= 0;
+
+                CLK1KHZ_TEMP <= NOT CLK1KHZ_TEMP;
+            ELSE
+                CLKCNT1KHZ <= CLKCNT1KHZ + 1;
+            END IF;
+        END IF;
+        IF CLK1KHZ_TEMP'event AND CLK1KHZ_TEMP = '1' THEN
+            IF CLKCNT10HZ = 49 THEN
+                CLKCNT10HZ <= 0;
+
+                CLK10HZ_TEMP <= NOT CLK10HZ_TEMP;
+            ELSE
+                CLKCNT10HZ <= CLKCNT10HZ + 1;
+            END IF;
+        END IF;
+        IF CLK10HZ_TEMP'event AND CLK10HZ_TEMP = '1' THEN
+            IF CLKCNT1HZ = 4 THEN
+                CLKCNT1HZ <= 0;
+
+                CLK1HZ_TEMP <= NOT CLK1HZ_TEMP;
+            ELSE
+                CLKCNT1HZ <= CLKCNT1HZ + 1;
+            END IF;
+        END IF;
+    END PROCESS;
+
+END ARCHITECTURE behav;
